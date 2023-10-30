@@ -1,20 +1,23 @@
 package org.leanpoker.player;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+
 import java.util.Map;
 
 @Controller()
 public class PlayerController {
 
-    ObjectMapper mapper = new ObjectMapper();
+    public ObjectMapper mapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
 
     @Get(produces = MediaType.TEXT_PLAIN)
     public String doGet() {
@@ -27,7 +30,7 @@ public class PlayerController {
         String action = body.get("action");
         String gameState = body.get("game_state");
         if ("bet_request".equals(action)) {
-            return String.valueOf(Player.betRequest(mapper.readTree(gameState)));
+            return String.valueOf(Player.betRequest(mapper.readValue(gameState, GameState.class)));
         }
         if ("showdown".equals(action)) {
             Player.showdown(mapper.readTree(gameState));
