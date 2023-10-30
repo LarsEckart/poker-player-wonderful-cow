@@ -8,7 +8,7 @@ public class Player {
 
     public static int betRequest(GameState gameState) {
 
-        return gameState.toRaise();
+        return 0;
     }
 
     public static void showdown(JsonNode game) {
