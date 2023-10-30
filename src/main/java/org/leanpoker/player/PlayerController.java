@@ -1,6 +1,7 @@
 package org.leanpoker.player;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -22,7 +23,9 @@ public class PlayerController {
 
     private static final Logger log = getLogger(PlayerController.class);
 
-    public ObjectMapper mapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
+    public ObjectMapper mapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
 
     @Get(produces = MediaType.TEXT_PLAIN)
     public String doGet() {
